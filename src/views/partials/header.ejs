@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+        <link rel="stylesheet" href="/css/main.css">
+        <% if (NODE_ENV.includes('dev')) { %>
+            <script>
+                // set up live reloading on browser
+                const host = window.location.hostname;
+                const currentPort = window.location.port;
+
+                const wsPort = currentPort ? (parseInt(currentPort) + 1) : 3001;
+
+                const ws = new WebSocekt(`ws://${host}:${wsPort}`);
+                ws.onclose = () => {
+                    setTimeout(() => location.reload(), 2000);
+                };
+            </script>
+        <% } %>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                </ul>
+            </nav>
+        </header>
+    </body>
+</html>

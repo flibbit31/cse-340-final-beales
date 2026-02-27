@@ -5,3 +5,5 @@ const global = (req, res, next) => {
 
     next();
 }
+
+export { global };

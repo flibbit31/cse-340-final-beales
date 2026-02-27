@@ -1,0 +1,20 @@
+<%- include('../../partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <form method="POST" ACTION="/register">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Create a Username" minlength = "3" required>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" minlength="12" pattern="(?=.*[0-9])(?=.*[!@#$%^&*]).*" required>
+        </div>
+        <div>
+            <label for="passwordConfirm">Confirm Password</label>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+        </div>
+        <button type="submit">Create Account</button>
+    </form>
+</main>
+<%- include('../../partials/footer') %>
