@@ -7,6 +7,11 @@ import { global } from './src/middleware/global.js';
 
 import routes from './src/controllers/routes.js';
 
+import { setupDatabase } from './src/models/setup.js';
+
+// testing imports
+import { testUsersModel } from './src/models/testing/users.js';
+
 // environment setup
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -93,5 +98,7 @@ app.use((err, req, res, next) => {
 
 // start server
 app.listen(PORT, () => {
+    setupDatabase();
+    testUsersModel();
     console.log(`Server is running on port ${PORT}`);
 });
