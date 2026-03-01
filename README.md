@@ -12,7 +12,7 @@ This website is designed to provide project and other business management tools 
 
 Projects: This site will include projects that may be created, archives, or unarchived by admins. Each project will include a name, description, creation date, and creator. Archived projects cannot have additional tasks or subtasks added to them unless they are first unarchived.
 
-Tasks: Each project may contain one or more tasks to be completed. Tasks work like a ticket system. An employee may submit a task for completion. Tasks include a name, description, priority, general vs delegated (see section below), status (created, accepted(if it is a delegated task), completed, archived), creator, and creation date. 
+Tasks: Each project may contain one or more tasks to be completed. Tasks work like a ticket system. An employee may submit a task for completion. Tasks include a name, description, priority, general vs delegated (see section below), status (created, accepted(if it is a delegated task), completed, archived), creator, accepting employee(if it is a delegated task), and creation date. 
 
 General vs delegated tasks: A task may be either general or delegated. A general task is controlled by the creator (or an admin) only. They determine when the task is complete. Delegated tasks may be accepted by any, but only one, employee. Only the employee who accepted the task may mark it as complete.
 
