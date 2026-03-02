@@ -1,6 +1,6 @@
 # cse-340-final-beales
 
-Note: Initial code draws from CSE-340 Practice Site code.
+Note: Much of the code draws from CSE-340 Practice Site code.
 
 As of 2/24/2026: Code currently includes a partial outline of an Express app that doesn't really do anything yet.
 

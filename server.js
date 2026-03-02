@@ -9,6 +9,12 @@ import routes from './src/controllers/routes.js';
 
 import { setupDatabase } from './src/models/setup.js';
 
+// session imports
+import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
+import { caCert } from './src/models/db.js';
+import { startSessionCleanup } from './src/utils/session-cleanup.js';
+
 // testing imports
 import { testUsersModel } from './src/models/testing/users.js';
 
@@ -18,6 +24,35 @@ const PORT = process.env.PORT || 3000;
 
 // express init
 const app = express();
+
+// session setup
+const pgSession = connectPgSimple(session);
+
+// session middleware
+app.use(session({
+    store: new pgSession({
+        conObject: {
+            connectionString: process.env.DB_URL,
+            ssl: {
+                ca: caCert,
+                rejectAnauthorized: true,
+                checkServerIdentity: () => { return undefined; }
+            }
+        },
+        tableName: 'session',
+        createTableIfMission: true
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUnitialized: false,
+    cookie: {
+        secure: NODE_ENV.includes('dev') !== true,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+startSessionCleanup();
 
 // POST data setup
 app.use(express.urlencoded({ extended: true }));
