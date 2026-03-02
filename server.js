@@ -99,6 +99,6 @@ app.use((err, req, res, next) => {
 // start server
 app.listen(PORT, () => {
     setupDatabase();
-    testUsersModel();
+    //testUsersModel();
     console.log(`Server is running on port ${PORT}`);
 });

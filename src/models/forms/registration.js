@@ -38,7 +38,7 @@ const saveUser = async (username, hashedPassword) => {
  */
 const getAllUsers = async () => {
     const query = `
-        SELECT id, username, roles.role_name AS "roleName", created_at
+        SELECT users.id, users.username, roles.role_name AS "roleName", users.created_at
         FROM users
         INNER JOIN roles ON users.role_id = roles.id
         ORDER BY created_at DESC
@@ -64,6 +64,16 @@ const getUserById = async (id) => {
     return result.rows[0] || null;
 };
 
+const getRoleId = async (roleName) => {
+    const query = `
+        SELECT id
+        FROM roles
+        WHERE role_name = $1
+    `;
+    const result = await db.query(query, [roleName]);
+    return result.rows[0].id;
+}
+
 /**
  * Update a user's username or role by id
  * 
@@ -73,15 +83,14 @@ const getUserById = async (id) => {
  * @returns {Promise<Object>} The updated user object
  */
 const updateUser = async (id, username, roleName) => {
+    const roleId = await getRoleId(roleName);
     const query = `
         UPDATE users
-        SET username = $2, role_id = roles.id
-        INNER JOIN roles ON $3 = roles.role_name
+        SET username = $2, role_id = $3, updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
-        RETURNING id, username, roles.role_name AS "roleName"
-        INNER JOIN roles ON users.role_id = roles.id
+        RETURNING id, username, role_id, updated_at
     `;
-    const result = await db.query(query, [id, username, roleName]);
+    const result = await db.query(query, [id, username, roleId]);
     return result.rows[0] || null;
 };
 
@@ -92,7 +101,7 @@ const updateUser = async (id, username, roleName) => {
  * @returns {Promise<boolean>} Returns true if deletion successful, false otherwise
  */
 const deleteUser = async (id) => {
-    const query = 'DELETE FROM user WHERE id = $1';
+    const query = 'DELETE FROM users WHERE id = $1';
     const result = await db.query(query, [id]);
     return result.rowCount > 0;
 };

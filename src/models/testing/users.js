@@ -3,10 +3,13 @@ import bcrypt from 'bcrypt';
 
 const testUsersModel = async () => {
     // Create a hardcoded test user
-    const username = 'joe';
+    /*const username = 'joe3';
     const password = 'joe1234%';
     const hashedPassword = await bcrypt.hash(password, 10);
-    await saveUser(username, hashedPassword);
+    const user = await saveUser(username, hashedPassword);*/
+    
+    await updateUser(3, 'bob', 'admin');
+    await deleteUser(1);
 };
 
 export { testUsersModel };
