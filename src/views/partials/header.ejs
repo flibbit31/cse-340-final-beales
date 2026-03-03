@@ -22,10 +22,28 @@
     </head>
     <body>
         <header>
+        <% 
+            const messages = flash();
+            const hasMessages = Object.values(messages).some(arr => arr.length > 0);
+        %>
+        <% if (hasMessages) { %>
+            <div class="flash-messages">
+                <% Object.keys(messages).forEach(type => { %>
+                    <% messages[type].forEach(message => { %>
+                        <div class="flash <%= type %>">
+                            <%= message %>
+                        </div>
+                    <% }); %>
+                <% }); %>
+            </div>
+        <% } %>
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/admin-dashboard">Admin Dashboard</a></li>
+                    <li><a href="/logout">Logout</a></li>
                 </ul>
             </nav>
         </header>

@@ -21,7 +21,10 @@ const processLogin = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        //TODO flash errors
+        //create flash errors
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
 
         return res.redirect('/login');
     }
@@ -32,13 +35,15 @@ const processLogin = async (req, res) => {
     try {
         const user = await findUserByUsername(username);
         if (!user) {
-            //TODO flash error
+            //invalid username
+            req.flash('error', 'Invalid username or password');
             return res.redirect('/login');
         }
 
         const verified = await verifyPassword(password, user.password);
         if (!verified) {
-            //TODO flash error
+            //invalid password
+            req.flash('error', 'Invalid username or password');
             return res.redirect('/login');
         }
 
@@ -47,12 +52,13 @@ const processLogin = async (req, res) => {
 
         // Save user to session
         req.session.user = user;
-        // TODO flash success message
+
+        req.flash('success', 'Login successful');
         res.redirect('/projects');
     }
     catch (error) {
         console.error(error);
-        //TODO flash error
+        req.flash('error', 'An unexpected login error occurred');
         res.redirect('/login');
     }
 };
@@ -86,9 +92,42 @@ const processLogout = (req, res) => {
     });
 };
 
+/**
+ * Display admin dashboard
+ */
+const showAdminDashboard = (req, res) => {
+    const user = req.session.user;
+    const sessionData = req.session;
+
+    let passwordFound = false;
+
+    // Make sure password is deleted from user object and session for security
+    if (user && user.password) {
+        console.error('Security error: password found in user object');
+        delete user.password;
+        passwordFound = true;
+    }
+    if (sessionData.user && sessionData.user.password) {
+        console.error('Security error: password found in sessionData.user');
+        delete sessionData.user.password;
+        passwordFound = true;
+    }
+
+    if (passwordFound) {
+        return;
+    }
+
+    // Render admin dashboard
+    res.render('admin-dashboard', {
+        title: 'Admin Dashboard',
+        user,
+        sessionData
+    });
+};
+
 // Create routes
 router.get('/', showLoginForm);
 router.post('/', processLogin);
 
 export default router;
-export { processLogout };
+export { processLogout, showAdminDashboard };

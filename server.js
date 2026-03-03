@@ -15,6 +15,9 @@ import connectPgSimple from 'connect-pg-simple';
 import { caCert } from './src/models/db.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 
+// flash import
+import flash from './src/middleware/flash.js';
+
 // testing imports
 import { testUsersModel } from './src/models/testing/users.js';
 
@@ -35,12 +38,12 @@ app.use(session({
             connectionString: process.env.DB_URL,
             ssl: {
                 ca: caCert,
-                rejectAnauthorized: true,
+                rejectUnauthorized: true,
                 checkServerIdentity: () => { return undefined; }
             }
         },
         tableName: 'session',
-        createTableIfMission: true
+        createTableIfMissing: true
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -68,6 +71,9 @@ app.set('views', path.join(__dirname, 'src/views'));
 
 // Global middleware
 app.use(global);
+
+// Flash middleware
+app.use(flash);
 
 // Routes
 app.use('/', routes);
