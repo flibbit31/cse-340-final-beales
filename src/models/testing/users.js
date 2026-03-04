@@ -1,4 +1,4 @@
-import { usernameExists, saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../forms/registration.js';
+import { usernameExists, saveUser, getAllUsers, getUserById, updateUsername, deleteUser } from '../forms/registration.js';
 import bcrypt from 'bcrypt';
 
 const testUsersModel = async () => {

@@ -1,0 +1,51 @@
+<%- include('./partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <% if (users && users.length > 0) { %>
+        <div>
+            <% users.forEach(listUser => { %>
+                <% 
+                    // Determine permissions for this user
+                    const currentUser = typeof isLoggedIn !== 'undefined' && isLoggedIn ? user : null;
+                    //const isAdmin = currentUser && currentUser.roleName === 'admin';
+                    const canDelete = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id;
+                    const canChangeRole = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id;
+                %>  
+                <div>
+                    <h3><%= listUser.username %></h3>
+
+                    <form method="POST" action="/admin-dashboard/<%= listUser.id %>/updatePassword">
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input type="password" id="password" name="password" minlength="8" required pattern="(?=.*[0-9])(?=.*[!@#$%^&*]).*">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordConfirm">Confirm New Password</label>
+                            <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+                        </div>
+                        <button type="submit">Change Employee's Password</button>
+                    </form>
+
+                    <% if (canChangeRole) { %>
+                        <form method="POST" action="/admin-dashboard/<%= listUser.id %>/updateRole">
+                            <input type="radio" id="pending employee" name="role" value="pending employee">
+                            <label for="pending employee">Pending Employee</label>
+                            <input type="radio" id="employee" name="role" value="employee">
+                            <label for="employee">Employee</label>
+                            <input type="radio" id="admin" name="role" value="admin">
+                            <label for="admin">Admin</label>
+                            <button type="submit">Change Employee's Role</button>
+                        </form>
+                    <% } %>
+
+                    <% if (canDelete) { %>
+                        <form method="POST" action="/admin-dashboard/<%= listUser.id %>/deleteAccount" style="display: inline;">
+                            <button type="submit" onclick="return confirm('Are you sure? This action cannot be undone.')">Delete Employee's Account</button>"
+                        </form> 
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+</main>
+<%- include('./partials/footer') %>

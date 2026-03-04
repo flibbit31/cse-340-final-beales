@@ -75,22 +75,21 @@ const getRoleId = async (roleName) => {
 }
 
 /**
- * Update a user's username or role by id
+ * Update a user's username by id
  * 
  * @param {} - User id
  * @param {string} - New username
- * @param {string} - New roleName
+
  * @returns {Promise<Object>} The updated user object
  */
-const updateUser = async (id, username, roleName) => {
-    const roleId = await getRoleId(roleName);
+const updateUsername = async (id, username) => {
     const query = `
         UPDATE users
-        SET username = $2, role_id = $3, updated_at = CURRENT_TIMESTAMP
+        SET username = $2, updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
-        RETURNING id, username, role_id, updated_at
+        RETURNING id, username, updated_at
     `;
-    const result = await db.query(query, [id, username, roleId]);
+    const result = await db.query(query, [id, username]);
     return result.rows[0] || null;
 };
 
@@ -111,6 +110,7 @@ export {
     saveUser,
     getAllUsers,
     getUserById,
-    updateUser,
+    getRoleId,
+    updateUsername,
     deleteUser
 };

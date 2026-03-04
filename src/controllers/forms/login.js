@@ -92,42 +92,9 @@ const processLogout = (req, res) => {
     });
 };
 
-/**
- * Display admin dashboard
- */
-const showAdminDashboard = (req, res) => {
-    const user = req.session.user;
-    const sessionData = req.session;
-
-    let passwordFound = false;
-
-    // Make sure password is deleted from user object and session for security
-    if (user && user.password) {
-        console.error('Security error: password found in user object');
-        delete user.password;
-        passwordFound = true;
-    }
-    if (sessionData.user && sessionData.user.password) {
-        console.error('Security error: password found in sessionData.user');
-        delete sessionData.user.password;
-        passwordFound = true;
-    }
-
-    if (passwordFound) {
-        return;
-    }
-
-    // Render admin dashboard
-    res.render('admin-dashboard', {
-        title: 'Admin Dashboard',
-        user,
-        sessionData
-    });
-};
-
 // Create routes
 router.get('/', showLoginForm);
 router.post('/', processLogin);
 
 export default router;
-export { processLogout, showAdminDashboard };
+export { processLogout };

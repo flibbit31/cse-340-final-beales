@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { validationResult, body } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { usernameExists, saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../../models/forms/registration.js';
+import { usernameExists, saveUser, getAllUsers, getUserById, updateUsername, deleteUser } from '../../models/forms/registration.js';
 
 const router = Router();
 
