@@ -1,0 +1,13 @@
+.form-div {
+    margin: 10px;
+
+    label {
+        color:beige;
+    }
+}
+
+button[type="submit"] {
+    background-color:lightblue;
+    margin: 10px;
+}
+

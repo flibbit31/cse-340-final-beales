@@ -13,6 +13,22 @@ import { Router } from 'express';
 // Create the router
 const router = Router();
 
+// dynamically add specific css sheets to different routes
+router.use('/register', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
+    next();
+});
+
+router.use('/login', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/login.css">');
+    next();
+});
+
+router.use('/admin-dashboard', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/admin-dashboard.css">');
+    next();
+});
+
 router.get('/', homePage);
 
 router.use('/register', registrationRoutes);

@@ -21,7 +21,11 @@ import flash from './src/middleware/flash.js';
 // testing imports
 import { testUsersModel } from './src/models/testing/users.js';
 
-// environment setup
+/**
+ * Server configuration
+ */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
@@ -57,13 +61,11 @@ app.use(session({
 
 startSessionCleanup();
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // POST data setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// file/dir setup
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // template config
 app.set('view engine', 'ejs');
