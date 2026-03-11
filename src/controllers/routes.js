@@ -6,6 +6,8 @@ import { processLogout } from './forms/login.js';
 
 import adminDashboardRoutes from './admin/dashboard.js';
 
+import projectsRoutes from './projects/projects.js';
+
 import { requireRole } from '../middleware/auth.js';
 
 import { Router } from 'express';
@@ -34,7 +36,11 @@ router.get('/', homePage);
 router.use('/register', registrationRoutes);
 router.use('/login', /*loginValidation,*/ loginRoutes);
 
-router.get('/logout', processLogout);
+router.get('/logout', requireRole('pending employee'), processLogout);
+
+//TODO change admin dashboard URL to something secret
 router.use('/admin-dashboard', adminDashboardRoutes);
+
+router.use('/projects', requireRole('employee'), projectsRoutes);
 
 export default router;

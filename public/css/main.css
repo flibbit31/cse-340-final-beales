@@ -7,6 +7,10 @@ h1 {
     text-align: center;
 }
 
-p, a {
+p, a, details {
     color:beige;
+}
+
+li {
+    color: white;
 }

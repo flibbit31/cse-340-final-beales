@@ -19,7 +19,7 @@ import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import flash from './src/middleware/flash.js';
 
 // testing imports
-import { testUsersModel } from './src/models/testing/users.js';
+import { testProjectsModel } from './src/models/testing/testing.js';
 
 /**
  * Server configuration
@@ -143,5 +143,6 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     setupDatabase();
     //testUsersModel();
+    //testProjectsModel();
     console.log(`Server is running on port ${PORT}`);
 });

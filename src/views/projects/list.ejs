@@ -1,0 +1,39 @@
+<%- include ('../partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <% 
+        //determine permissions for currentUser
+        const currentUser = typeof isLoggedIn !== 'undefined' && isLoggedIn ? user : null;
+        const canAdd = currentUser && currentUser.roleName === 'admin';
+        const canEdit = currentUser && currentUser.roleName === 'admin';
+        const canClickDetails = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin');
+    %>
+
+    <% if (canAdd) { %>
+        <a class="add-button" href="/projects/add">Add New Project</a>
+    <% } %>
+
+    <% if (projects && projects.length > 0) { %>
+        <div>
+            <% projects.forEach(listProject => { %>
+                <div>
+                    <h3><%= listProject.name %></h3>
+                    <h3>Created by <%= listProject.creatorName %></h3>
+                    
+                    <% if (canEdit || canClickDetails) { %> 
+                        <div> 
+                            <% if (canClickDetails) { %>
+                                <a href="/projects/<%= listProject.id %>/details">Details</a>
+                            <% } %>
+
+                            <% if (canEdit) { %>
+                                <a href="/projects/<%= listProject.id %>/edit">Edit</a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+</main>
+<%- include('../partials/footer') %>

@@ -42,10 +42,20 @@
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/register">Register</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/admin-dashboard">Admin Dashboard</a></li>
-                    <li><a href="/logout">Logout</a></li>
+
+                    <% if (!isLoggedIn) { %>
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="/login">Login</a></li>
+                    <% } %>
+
+                    <% if (roleName) { %>
+                        <li><a href="/projects">Projects</a></li>
+                    <% } %>
+
+                    <% if (isLoggedIn) { %>
+                        <li><a href="/logout">Logout</a></li>
+                    <% } %>
+                    
                 </ul>
             </nav>
         </header>

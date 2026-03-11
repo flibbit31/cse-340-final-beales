@@ -36,10 +36,12 @@ const global = (req, res, next) => {
     // set up dynamic asset loading
     setHeadAssetsFunctionality(res);
 
-    // session isLoggedIn variable for UI
+    // session isLoggedIn and roleName variables for UI
     res.locals.isLoggedIn = false;
+    res.locals.roleName = null;
     if (req.session && req.session.user) {
         res.locals.isLoggedIn = true;
+        res.locals.roleName = req.session.user.roleName;
     }
 
     next();

@@ -9,7 +9,7 @@
                     const currentUser = typeof isLoggedIn !== 'undefined' && isLoggedIn ? user : null;
                     //const isAdmin = currentUser && currentUser.roleName === 'admin';
                     const canDelete = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id;
-                    const canChangeRole = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id;
+                    const canChangeRole = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id && listUser.roleName !== 'admin';
                 %>  
                 <div>
                     <h3><%= listUser.username %></h3>
@@ -28,11 +28,11 @@
 
                     <% if (canChangeRole) { %>
                         <form method="POST" action="/admin-dashboard/<%= listUser.id %>/updateRole">
-                            <input type="radio" id="pending employee" name="role" value="pending employee">
+                            <input type="radio" id="pending employee" name="role" value="pending employee" <% if (listUser.roleName === 'pending employee') { %> checked <% } %>>
                             <label for="pending employee">Pending Employee</label>
-                            <input type="radio" id="employee" name="role" value="employee">
+                            <input type="radio" id="employee" name="role" value="employee" <% if (listUser.roleName === 'employee') { %> checked <% } %>>
                             <label for="employee">Employee</label>
-                            <input type="radio" id="admin" name="role" value="admin">
+                            <input type="radio" id="admin" name="role" value="admin" <% if (listUser.roleName === 'admin') { %> checked <% } %>>
                             <label for="admin">Admin</label>
                             <button type="submit">Change Employee's Role</button>
                         </form>

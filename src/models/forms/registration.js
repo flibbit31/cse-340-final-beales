@@ -50,7 +50,7 @@ const getAllUsers = async () => {
 /**
  * Get a single user by their id
  * 
- * @param {} - User id
+ * @param {} id - User id
  * @returns {Promise<Object>} The user object
  */
 const getUserById = async (id) => {
@@ -77,10 +77,10 @@ const getRoleId = async (roleName) => {
 /**
  * Update a user's username by id
  * 
- * @param {} - User id
- * @param {string} - New username
+ * @param {} id - User id
+ * @param {string} username - New username
 
- * @returns {Promise<Object>} The updated user object
+ * @returns {Promise<Object>|null} The updated user object, or null if no user is found
  */
 const updateUsername = async (id, username) => {
     const query = `
@@ -96,7 +96,7 @@ const updateUsername = async (id, username) => {
 /**
  * Delete a user by id
  * 
- * @param {} - User id
+ * @param {} id - User id
  * @returns {Promise<boolean>} Returns true if deletion successful, false otherwise
  */
 const deleteUser = async (id) => {
