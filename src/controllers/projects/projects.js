@@ -1,8 +1,25 @@
-import { getAllProjects, getProjectById } from '../../models/projects.js';
+import { nameExists, saveProject, getAllProjects, getProjectById, updateProject } from '../../models/projects.js';
 import { requireRole } from '../../middleware/auth.js';
+import { validationResult, body } from 'express-validator';
 import { Router } from 'express';
 
 const router = Router();
+
+/**
+ * Project Input Validation
+ */
+const projectValidation = [
+    body('title')
+        .trim()
+        .isLength({ min: 2, max: 100 })
+        .withMessage('Title must be between 2 and 100 characters'),
+        //TODO .matches validation
+    body('description')
+        .trim()
+        .isLength({ max: 65535 })
+        .withMessage('Description must be less than or equal to 65535 characters'),
+        //TODO .matches validation
+];
 
 /**
  * Show projects list
@@ -66,12 +83,74 @@ const showAddProject = async (req, res) => {
     // retrieve current user data
     const user = req.session.user;
 
+    // if there is any temporary project data from a previous attempt to add a project, retrieve it now
+    let project = { name: '', description: '', archived: false };
+    if (req.session.project) {
+        project = req.session.project;
+    }
+
     // render add project page 
     res.render('projects/add-edit', {
         title: 'New Project',
         user,
-        project: null //this form is not being used for editing, so there is no current project info for prefilling the form
+        edit: false,
+        project 
     });
+};
+
+/**
+ * Process adding a new project
+ */
+const processAddProject = async (req, res) => {
+    // Get project data from body
+    const { title, description, archived } = req.body;
+
+    // Validation check
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //display errors as flash errors
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
+
+        // Save already entered project data to the session so that the user doesn't have to reenter it
+        const project = { name: title, description, archived };
+        req.session.project = project;
+
+        // redirect back to add project page
+        return res.redirect('/projects/add');
+    }
+
+    try {
+        // Make sure title is unique
+        if (await nameExists(title)) {
+            // Save already entered project data to the session so that the user doesn't have to reenter it
+            const project = { name: title, description, archived };
+            req.session.project = project;
+
+            // send a flash error to the user
+            req.flash('error', 'That project title is already taken.');
+            return res.redirect('/projects/add');
+        }
+
+        // Save project to database
+        await saveProject(title, req.session.user.id, description, archived);
+
+        //If there is any temporary project data in the session, delete it so that is doesn't show up in the form later
+        delete req.session.project;
+
+        req.flash('success', `${title} successfully added`);
+        return res.redirect('/projects');
+    }
+    catch (error) {
+        // Save already entered project data to the session so that the user doesn't have to reenter it
+        const project = { name: title, description, archived };
+        req.session.project = project;
+
+        console.error('Error saving project:', error);
+        req.flash('error', 'An unexpected error occurred saving the project.');
+        res.redirect('/projects/add');
+    }
 };
 
 const showEditProject = async (req, res) => {
@@ -96,6 +175,7 @@ const showEditProject = async (req, res) => {
     res.render('projects/add-edit', {
         title: `Edit ${project.name}`,
         user,
+        edit: true,
         project
     });
 };
@@ -111,9 +191,14 @@ router.get('/', requireRole('employee'), showProjectsList);
 router.get('/:id/details', requireRole('employee'), showProjectDetails);
 
 /**
- * GET /projects/add - Display add project page
+ * GET /projects/add - Display add project form page
  */
 router.get('/add', requireRole('admin'), showAddProject);
+
+/**
+ * POST /projects/add - Send the add project form
+ */
+router.post('/add', requireRole('admin'), projectValidation, processAddProject);
 
 /**
  * GET /projects/:id/edit - Display edit project page (same as add project page but prefilled)

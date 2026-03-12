@@ -17,12 +17,17 @@ const router = Router();
 
 // dynamically add specific css sheets to different routes
 router.use('/register', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
+    res.addStyle('<link rel="stylesheet" href="/css/form.css">');
     next();
 });
 
 router.use('/login', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/login.css">');
+    res.addStyle('<link rel="stylesheet" href="/css/form.css">');
+    next();
+});
+
+router.use('/projects', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/form.css">');
     next();
 });
 

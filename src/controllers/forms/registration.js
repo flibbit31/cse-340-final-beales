@@ -34,7 +34,7 @@ const router = Router();
     const { username, password } = req.body;
     try {
         // Make sure username is unique
-        if(await usernameExists(username)) {
+        if (await usernameExists(username)) {
             req.flash('error', 'That username is already taken.');
             return res.redirect('/register');
         }
@@ -84,7 +84,7 @@ const router = Router();
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Username must be between 2 and 100 characters'),
-        //TODO.matches validation
+        //TODO .matches validation
     body('password')
         .isLength({ min: 8, max: 128})
         .withMessage('Password must be between 8 and 128 characters')

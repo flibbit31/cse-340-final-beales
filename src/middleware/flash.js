@@ -7,7 +7,7 @@ const flashMiddleware = (req, res, next) => {
     res.redirect = (...args) => {
         if (sessionNeedsSave && req.session) {
             req.session.save(() => {
-                originalRedirect.apply(res. args);
+                originalRedirect.apply(res, args);
             });
         }
         else {

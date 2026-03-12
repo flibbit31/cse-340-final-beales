@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <form method="POST" action="/projects/<%= edit ? 'edit' : 'add' %>" novalidate>
+        <div class="form-div">
+            <label for="title">Project Title</label>
+            <input type="text" id="title" name="title" value="<%= project.name %>" minlength = "2" maxlength = "100" required>
+        </div>
+
+        <div class="form-div">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="10" maxlength = "65535">
+                <%= project.description %>
+            </textarea>
+        </div>
+
+        <div class="form-div">
+            <input type="checkbox" id="archived" name="archived" value="archived" <% if (project.archived) { %> checked <% } %>>
+            <label for="archived">Archived</label>
+        </div>
+
+        <button type="submit"><%= edit ? 'Update Project' : 'Add Project' %></button>
+    </form>
+</main>
+<%- include('../partials/footer') %>

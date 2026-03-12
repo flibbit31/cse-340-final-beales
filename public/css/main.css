@@ -14,3 +14,15 @@ p, a, details {
 li {
     color: white;
 }
+
+.flash-messages {
+    .flash {
+        &.success {
+            color: green;
+        }
+
+        &.error {
+            color: red;
+        }
+    }
+}
