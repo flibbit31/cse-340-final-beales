@@ -1,18 +1,72 @@
 body {
-    background-color:rgb(20, 20, 20);
+    background-color:rgb(25, 25, 25);
 }
 
 h1 {
     color:beige;
     text-align: center;
+    margin: 65px;
 }
 
 p, a, details {
     color:beige;
 }
 
-li {
-    color: white;
+.welcome-message {
+    text-align: center;
+}
+
+.message-404 {
+    text-align: center;
+    color: beige;
+    width: 50%;
+    padding: 10px;
+    margin: auto;
+}
+
+a:visited {
+    color:violet;
+}
+
+.nav-bar {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        background-color: gray;
+        display: flex;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        width: 100%;
+
+        li {
+            float: left;
+            border-left: 1px solid black;
+            a {
+                display: block;
+                color: black;
+                padding: 15px;
+                text-decoration: none;
+            }
+
+            a:hover {
+                background-color: rgb(128, 128, 128);
+            }
+
+            a:visited {
+                color: purple;
+            }
+
+            a.active {
+                background-color: green;
+            }
+        }
+
+        li:last-child {
+            border-right: 1px solid black;
+        }
+    }
 }
 
 .flash-messages {

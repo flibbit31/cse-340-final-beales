@@ -1,13 +1,25 @@
-.form-div {
-    margin: 10px;
+.whole-form {
+    border: 2px solid white;
+    display: inline-block;
 
-    label {
-        color:beige;
+    h2 {
+        text-align: center;
+        color: silver;
+        text-shadow: 1px 1px gray;
+    }
+
+    .form-div {
+        margin: 10px;
+
+        label {
+            color:beige;
+        }
+    }
+
+    button[type="submit"] {
+        background-color:lightblue;
+        margin: 10px;
     }
 }
 
-button[type="submit"] {
-    background-color:lightblue;
-    margin: 10px;
-}
 

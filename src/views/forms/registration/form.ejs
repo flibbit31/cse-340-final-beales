@@ -1,7 +1,8 @@
 <%- include('../../partials/header') %>
 <main>
     <h1><%= title %></h1>
-    <form method="POST" action="/register">
+    <form class="whole-form" method="POST" action="/register">
+        <h2>Register</h2>
         <div class="form-div">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Create a Username" minlength = "3" required>
