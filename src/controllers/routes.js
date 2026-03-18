@@ -27,6 +27,7 @@ router.use('/login', (req, res, next) => {
 });
 
 router.use('/projects', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/projects.css">');
     res.addStyle('<link rel="stylesheet" href="/css/form.css">');
     next();
 });

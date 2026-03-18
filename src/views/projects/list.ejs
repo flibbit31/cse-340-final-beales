@@ -14,20 +14,20 @@
     <% } %>
 
     <% if (projects && projects.length > 0) { %>
-        <div>
+        <div class="projects-grid">
             <% projects.forEach(listProject => { %>
-                <div>
+                <div class="project-card">
                     <h3><%= listProject.name %></h3>
                     <h3>Created by <%= listProject.creatorName %></h3>
                     
                     <% if (canEdit || canClickDetails) { %> 
-                        <div> 
+                        <div class="buttons-div"> 
                             <% if (canClickDetails) { %>
-                                <a href="/projects/<%= listProject.id %>/details">Details</a>
+                                <a class="details-button" href="/projects/<%= listProject.id %>/details">Details</a>
                             <% } %>
 
                             <% if (canEdit) { %>
-                                <a href="/projects/<%= listProject.id %>/edit">Edit</a>
+                                <a class="edit-button" href="/projects/<%= listProject.id %>/edit">Edit</a>
                             <% } %>
                         </div>
                     <% } %>

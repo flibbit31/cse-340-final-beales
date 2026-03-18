@@ -1,0 +1,55 @@
+.add-button {
+    background-color: red;
+    color: beige;
+    padding: 15px;
+    margin: 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+
+    .project-card {
+        border: 2px solid white;
+        display: inline-block;
+
+        h3 {
+            color: silver;
+            text-align: center;
+        }
+
+        .buttons-div {
+            display: flex;
+            justify-content: center;
+
+            .details-button {
+                background-color: blue;
+                color: beige;
+                padding: 15px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .details-button:hover {
+                background-color:lightblue;
+            }
+
+            .edit-button {
+                background-color: green;
+                color: beige;
+                padding: 15px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .edit-button:hover {
+                background-color:lightgreen;
+            }
+        }
+    }
+}

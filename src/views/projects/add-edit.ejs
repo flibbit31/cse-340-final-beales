@@ -2,7 +2,7 @@
 <main>
     <h1><%= title %></h1>
 
-    <form method="POST" action="/projects/<%= edit ? 'edit' : 'add' %>" novalidate>
+    <form class="whole-form" method="POST" action="/projects/<%= edit ? 'edit' : 'add' %>" novalidate>
         <div class="form-div">
             <label for="title">Project Title</label>
             <input type="text" id="title" name="title" value="<%= project.name %>" minlength = "2" maxlength = "100" required>
