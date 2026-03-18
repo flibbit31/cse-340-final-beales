@@ -141,7 +141,7 @@ app.use((err, req, res, next) => {
 
 // start server
 app.listen(PORT, () => {
-    setupDatabase();
+    //setupDatabase();
     //testUsersModel();
     //testProjectsModel();
     console.log(`Server is running on port ${PORT}`);

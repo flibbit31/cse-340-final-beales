@@ -32,7 +32,7 @@ router.use('/projects', (req, res, next) => {
 });
 
 router.use('/admin-dashboard', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/admin-dashboard.css">');
+    res.addStyle('<link rel="stylesheet" href="/css/admin.css">');
     next();
 });
 

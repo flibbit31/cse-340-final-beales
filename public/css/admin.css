@@ -1,0 +1,27 @@
+.accounts-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+
+    .account-card {
+        border: 2px solid white;
+        display: inline-block;
+
+        h3 {
+            color: silver;
+            text-align: center;
+        }
+
+        .whole-form {
+            margin: 10px;
+
+            label {
+                color: beige;
+            }
+
+            button[type="submit"] {
+                background-color:lightblue;
+                margin: 10px;
+            }
+        }
+    }
+}
