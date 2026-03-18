@@ -136,9 +136,10 @@ const processAddProject = async (req, res) => {
         // Save project to database
         await saveProject(title, req.session.user.id, description, archived);
 
-        //If there is any temporary project data in the session, delete it so that is doesn't show up in the form later
+        // If there is any temporary project data in the session, delete it so that is doesn't show up in the form later
         delete req.session.project;
 
+        // send success message to user
         req.flash('success', `${title} successfully added`);
         return res.redirect('/projects');
     }
@@ -176,8 +177,58 @@ const showEditProject = async (req, res) => {
         title: `Edit ${project.name}`,
         user,
         edit: true,
-        project
+        project,
+        projectId
     });
+};
+
+const processEditProject = async (req, res) => {
+    const { title, description, archived: arch } = req.body;
+
+    // converted archived to boolean
+    let archived = false;
+    if (arch) {
+        archived = true;
+    }
+
+    const projectId = parseInt(req.params.id);
+
+    // Validation check
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //display errors as flash errors
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
+
+        // Save already entered project data to the session so that the user doesn't have to reenter it
+        const project = { name: title, description, archived };
+        req.session.project = project;
+
+        // redirect back to edit project page
+        return res.redirect(`/projects/${projectId}/edit`);
+    }
+
+    try {
+        // update project to database
+        await updateProject(projectId, title, description, archived);
+
+        // If there is any temporary project data in the session, delete it
+        delete req.session.project;
+
+        // send success message to user
+        req.flash('success', `${title} successfully added`);
+        return res.redirect('/projects');
+    }
+    catch (error) {
+        // Save already entered project data to the session
+        const project = { name: title, description, archived };
+        req.session.project = project;
+
+        console.error('Error saving project:', error);
+        req.flash('error', 'An unexpected error occurred saving the project');
+        res.redirect(`/projects/${projectId}/edit`);
+    }
 };
 
 /**
@@ -204,5 +255,10 @@ router.post('/add', requireRole('admin'), projectValidation, processAddProject);
  * GET /projects/:id/edit - Display edit project page (same as add project page but prefilled)
  */
 router.get('/:id/edit', requireRole('admin'), showEditProject);
+
+/**
+ * POST /projects/:id/edit - Send the edit project form
+ */
+router.post('/:id/edit', requireRole('admin'), projectValidation, processEditProject);
 
 export default router;
