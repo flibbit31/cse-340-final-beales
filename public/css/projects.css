@@ -8,11 +8,17 @@
     display: inline-block;
 }
 
-.projects-grid {
+.details {
+    h3 {
+        color: beige;
+    }
+}
+
+.list-grid {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
 
-    .project-card {
+    .item-card {
         border: 2px solid white;
         display: inline-block;
 

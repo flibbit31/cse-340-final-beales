@@ -14,9 +14,9 @@
     <% } %>
 
     <% if (projects && projects.length > 0) { %>
-        <div class="projects-grid">
+        <div class="list-grid">
             <% projects.forEach(listProject => { %>
-                <div class="project-card">
+                <div class="item-card">
                     <h3><%= listProject.name %></h3>
                     <h3>Created by <%= listProject.creatorName %></h3>
                     

@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <div class="details">
+        <h3>Status: <%= project.archived ? 'archived' : 'active' %></h3>
+        <h3>Created by: <%= project.creatorName %> on <%= project.created_at %></h3>
+        <h3>Last updated on <%= project.updated_at %></h3>
+        <p><%= project.description %></p>
+    </div>
+    <% 
+        const currentUser = typeof isLoggedIn !== 'undefined' && isLoggedIn ? user : null;
+        const canAdd = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin');
+        const canClickDetails = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin');
+    %>
+    
+    <% if (canAdd) { %>
+        <a class="add-button" href="/projects/<%= project.id %>/tasks/add">Add New Task</a>
+    <% } %>
+
+    <% if (tasks && tasks.length > 0) { %>
+        <div class="list-grid">
+            <% tasks.forEach(listTask => { 
+                const canEdit = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin') && currentUser.id === project.creator_id;
+            %>
+                <div class="item-card">
+                    <h3><%= listTask.name %></h3>
+                    <h3>Created by <%= listTask.creatorName %></h3>
+
+                    <% if (canEdit || canClickDetails) { %>
+                        <div class="buttons-div">
+                            <% if (canClickDetails) { %>
+                                <a class="details-button" href="/projects/<%= project.id %>/tasks/<%= listTask.id %>/details">Details</a>
+                            <% } %>
+
+                            <% if (canEdit) { %>
+                                <a class="edit-button" href="/projects/<%= project.id %>/tasks/<%= listTask.id %>/edit">Edit</a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+</main>
+<%- include('../partials/footer') %>

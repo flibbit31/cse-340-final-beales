@@ -57,22 +57,25 @@ const showProjectDetails = async (req, res) => {
     //retrieve project to edit
     const projectId = parseInt(req.params.id);
     let project = [];
+    let tasks = null;
 
     try {
         project = await getProjectById(projectId);
+        //tasks = await getTasksByProjectId(projectId);
     }
     catch (error) {
-        console.error('Error retrieving project:', error);
-        req.flash('error', 'Error retrieving project');
+        console.error('Error retrieving project and/or tasks:', error);
+        req.flash('error', 'Error retrieving project and/or tasks');
         //TODO test to make sure this redirects back to /projects
         return res.redirect('/');
     }
 
     //render project details page
-    res.render('projects/details', {
+    res.render(`projects/details`, {
         title: project.name,
         user,
-        project
+        project,
+        tasks
     });
 };
 

@@ -57,7 +57,7 @@ const getAllProjects = async () => {
  */
 const getProjectById = async (id) => {
     const query = `
-        SELECT projects.id, projects.name, projects.description, projects.archived, users.username AS "creatorName", projects.created_at, projects.updated_at
+        SELECT projects.id, projects.name, projects.description, projects.archived, projects.creator_id, users.username AS "creatorName", projects.created_at, projects.updated_at
         FROM projects
         INNER JOIN users ON users.id = projects.creator_id
         WHERE projects.id = $1
