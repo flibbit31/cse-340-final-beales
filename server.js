@@ -52,12 +52,13 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUnitialized: false,
+    proxy: true,
     cookie: {
         secure: NODE_ENV.includes('dev') !== true,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         sameSite: NODE_ENV.includes('dev') ? 'lax' : 'none',
-        domain: NODE_ENV.includes('dev') ? 'Localhost' : 'cse-340-final-beales.onrender.com'
+        domain: NODE_ENV.includes('dev') ? 'localhost' : 'cse-340-final-beales.onrender.com'
     }
 }));
 
