@@ -1,6 +1,7 @@
 import { usernameExists, saveUser, getAllUsers, getUserById, updateUsername, deleteUser } from '../forms/registration.js';
 import { nameExists, saveProject, getAllProjects, getProjectById, updateProject, deleteProject } from '../projects.js';
 import bcrypt from 'bcrypt';
+import { saveTask, getTasksByProjectId, getTaskById, updateTask, deleteTask } from '../tasks.js';
 
 const testUsersModel = async () => {
     // Create a hardcoded test user
@@ -51,4 +52,18 @@ const testProjectsModel = async () => {
     console.log(deleted);
 };
 
-export { testUsersModel, testProjectsModel };
+const testTasksModel = async () => {
+    const task = await saveTask(7, 'Project244', 5, 'A hard-coded project', 2, true, 'created', null);
+    console.log(task);
+
+    console.log(await getTasksByProjectId(7));
+
+    console.log(await getTaskById(task.id));
+
+    const updated = await updateTask(task.id, task.project_id, 'Project255', 5, 'N/A', 2, true, 'created', null);
+    console.log(updated);
+
+    console.log(await deleteTask(updated.id));
+};
+
+export { testUsersModel, testProjectsModel, testTasksModel };

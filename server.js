@@ -19,7 +19,7 @@ import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import flash from './src/middleware/flash.js';
 
 // testing imports
-import { testProjectsModel } from './src/models/testing/testing.js';
+import { testTasksModel } from './src/models/testing/testing.js';
 
 /**
  * Server configuration
@@ -55,7 +55,9 @@ app.use(session({
     cookie: {
         secure: NODE_ENV.includes('dev') !== true,
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: NODE_ENV.includes('dev') ? 'lax' : 'none',
+        domain: NODE_ENV.includes('dev') ? 'Localhost' : 'cse-340-final-beales.onrender.com'
     }
 }));
 
@@ -141,8 +143,9 @@ app.use((err, req, res, next) => {
 
 // start server
 app.listen(PORT, () => {
-    //setupDatabase();
+    setupDatabase();
     //testUsersModel();
     //testProjectsModel();
+    //testTasksModel();
     console.log(`Server is running on port ${PORT}`);
 });

@@ -90,7 +90,7 @@ const updateProject = async (id, name, description, archived) => {
  * Delete a project by id
  * 
  * @param {number} id - Project id
- * @returns {Promise<boolean>} Returns true if deletion successful, false otherwise
+ * @returns {Promise<boolean>} Returns true if deletion is successful, false otherwise
  */
 const deleteProject = async (id) => {
     const query = 'DELETE FROM projects WHERE id = $1';
