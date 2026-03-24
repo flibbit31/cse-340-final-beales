@@ -70,6 +70,8 @@ a:visited {
 }
 
 .flash-messages {
+    display: block;
+    margin: 75px; 
     .flash {
         &.success {
             color: green;

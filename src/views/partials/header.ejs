@@ -24,21 +24,6 @@
     </head>
     <body>
         <header>
-        <% 
-            const messages = flash();
-            const hasMessages = Object.values(messages).some(arr => arr.length > 0);
-        %>
-        <% if (hasMessages) { %>
-            <div class="flash-messages">
-                <% Object.keys(messages).forEach(type => { %>
-                    <% messages[type].forEach(message => { %>
-                        <div class="flash <%= type %>">
-                            <%= message %>
-                        </div>
-                    <% }); %>
-                <% }); %>
-            </div>
-        <% } %>
             <nav class="nav-bar">
                 <ul>
                     <li><a href="/">Home</a></li>
@@ -58,4 +43,19 @@
                     
                 </ul>
             </nav>
+            <% 
+                const messages = flash();
+                const hasMessages = Object.values(messages).some(arr => arr.length > 0);
+            %>
+            <% if (hasMessages) { %>
+                <div class="flash-messages">
+                    <% Object.keys(messages).forEach(type => { %>
+                        <% messages[type].forEach(message => { %>
+                            <div class="flash <%= type %>">
+                                <%= message %>
+                            </div>
+                        <% }); %>
+                    <% }); %>
+                </div>
+            <% } %>
         </header>

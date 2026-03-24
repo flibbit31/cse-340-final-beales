@@ -2,8 +2,11 @@ import { nameExists, saveProject, getAllProjects, getProjectById, updateProject 
 import { requireRole } from '../../middleware/auth.js';
 import { validationResult, body } from 'express-validator';
 import { Router } from 'express';
+import { getTasksByProjectId } from '../../models/tasks.js';
 
-const router = Router();
+import taskRouter from '../tasks.js';
+
+const router = Router({ mergeParams: true });
 
 /**
  * Project Input Validation
@@ -54,14 +57,14 @@ const showProjectDetails = async (req, res) => {
     // retrieve current user data
     const user = req.session.user;
 
-    //retrieve project to edit
+    //retrieve project to show
     const projectId = parseInt(req.params.id);
     let project = [];
     let tasks = null;
 
     try {
         project = await getProjectById(projectId);
-        //tasks = await getTasksByProjectId(projectId);
+        tasks = await getTasksByProjectId(projectId);
     }
     catch (error) {
         console.error('Error retrieving project and/or tasks:', error);
@@ -106,7 +109,13 @@ const showAddProject = async (req, res) => {
  */
 const processAddProject = async (req, res) => {
     // Get project data from body
-    const { title, description, archived } = req.body;
+    const { title, description, archived: arch } = req.body;
+
+    // convert archived to boolean
+    let archived = false;
+    if (arch) {
+        archived = true;
+    }
 
     // Validation check
     const errors = validationResult(req);
@@ -263,5 +272,10 @@ router.get('/:id/edit', requireRole('admin'), showEditProject);
  * POST /projects/:id/edit - Send the edit project form
  */
 router.post('/:id/edit', requireRole('admin'), projectValidation, processEditProject);
+
+/**
+ * USE /projects/:projectId/tasks - Task router
+ */
+router.use('/:id/tasks', requireRole('employee'), taskRouter);
 
 export default router;

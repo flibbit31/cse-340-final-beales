@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <form class="whole-form" method="POST" action="/projects/<%= projectId %>/tasks/<%= edit ? `${taskId}/edit` : 'add' %>">
+        <div class="from-div">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" name="title" minlength = "2" maxlength = "100" required>
+        </div>
+
+        <div class="form-div">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="10" maxlength = "65536">
+
+            </textarea>
+        </div>
+
+        <div class="form-div">
+            <input type="checkbox" id="archived" name="archived" value="archived">
+            <label for="archived">Archived</label>
+        </div>
+
+        <div class="form-div">
+            <input type="checkbox" id="general" name="general" value="general">
+            <label for="general">General or Delegated - General = checked, Delegated = unchecked</label>
+        </div>
+
+        <div class="form-div">
+            <label for="priority">Priority</label>
+            <input type="number" id="priority" name="priority" min: 1 max: 10>
+        </div>
+
+        <button type="submit"><%= edit ? 'Update Task' : 'Add Task' %></button>
+    </form>
+</main>
+<%- include('../partials/footer') %>

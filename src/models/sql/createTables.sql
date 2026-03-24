@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     priority INTEGER NOT NULL,
     general BOOLEAN NOT NULL DEFAULT true,
     status task_status NOT NULL DEFAULT 'created',
+    archived BOOLEAN NOT NULL DEFAULT false,
     creator_id INTEGER NOT NULL,
     acceptor_id INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
