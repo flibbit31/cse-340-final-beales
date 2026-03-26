@@ -180,8 +180,7 @@ const showEditProject = async (req, res) => {
     catch (error) {
         console.error('Error retrieving project', error);
         req.flash('error', 'Error retreiving project');
-        //TODO test to make sure this redirect back to /projects
-        return res.redirect('/');
+        return res.redirect('/projects');
     }
 
     // render project edit form

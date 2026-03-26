@@ -90,7 +90,7 @@ const processAddTask = async (req, res) => {
 
     let general = false;
     if (gen) {
-        general  = true;
+        general = true;
     }
 
     // Validation check
@@ -129,6 +129,106 @@ const processAddTask = async (req, res) => {
 };
 
 /**
+ * GET /projects/:projectId/tasks/:taskId/edit
+ */
+const showEditTask = async (req, res) => {
+    // retrieve current user data
+    const user = req.session.user;
+
+    //retrieve project/task data for prefilling the form
+    const projectId = parseInt(req.params.id);
+    const taskId = parseInt(req.params.taskId);
+    let task = [];
+
+    try {
+        task = await getTaskById(taskId);
+    }
+    catch (error) {
+        console.error('Error retrieving task', error);
+        req.flash('error', 'Error retrieving task');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    // check if user has permission to edit this task
+    if (user.roleName !== 'admin' && user.id !== task.creator_id) {
+        req.flash('error', 'You do not have permission to edit this task.');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    // render task edit form
+    res.render('tasks/add-edit', {
+        title: `Edit ${task.name}`,
+        user,
+        edit: true,
+        projectId,
+        taskId: task.id,
+        task
+    });
+};
+
+/**
+ * POST /projects/:projectId/tasks/:taskId/edit
+ */
+const processEditTask = async (req, res) => {
+    // Get task data from body
+    const { title, description, archived: arch, general: gen, priority } = req.body;
+
+    // retrieve current user data
+    const user = req.session.user;
+
+    // Get project and task ids from params
+    const projectId = parseInt(req.params.id);
+    const taskId = parseInt(req.params.taskId);
+
+    //convert archived and general to boolean
+    let archived = false;
+    if (arch) {
+        archived = true;
+    }
+
+    let general = false;
+    if (gen) {
+        general = true;
+    }
+
+    // Validation check
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //display errors as flash errors
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
+
+        //redirect back to add task page
+        return res.redirect(`/projects/${projectId}/tasks/${taskId}/edit`);
+    }
+
+    try {
+        // Get task from database
+        const task = await getTaskById(taskId);
+
+        // check if user has permission to edit this task
+        if (user.roleName !== 'admin' && user.id !== task.creator_id) {
+            req.flash('error', 'You do not have permission to edit this task.');
+            return res.redirect(`/projects/${projectId}/details`);
+        }
+
+        // Update task in database
+        await updateTask(taskId, projectId, title, req.session.user.id, description, priority, general, task.status, archived, task.acceptor_id);
+
+        // send success message to user
+        req.flash('success', `${title} successfully edited`);
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+    catch (error) {
+        // send error to console and user 
+        console.error('Error editing task:', error);
+        req.flash('error', 'An unexpected error occurred editing the task.');
+        return res.redirect(`/projects/${projectId}/tasks/${taskId}/edit`);
+    }
+};
+
+/**
  * GET /projects/:projectId/tasks/add
  */
 taskRouter.get('/add', requireRole('employee'), showAddTask);
@@ -137,5 +237,15 @@ taskRouter.get('/add', requireRole('employee'), showAddTask);
  * POST /projects/:projectId/tasks/add
  */
 taskRouter.post('/add', requireRole('employee'), taskValidation, processAddTask);
+
+/**
+ * GET /projects/:projectId/tasks/:taskId/edit
+ */
+taskRouter.get('/:taskId/edit', requireRole('employee'), showEditTask);
+
+/**
+ * POST /projects/:projectId/tasks/:taskId/edit
+ */
+taskRouter.post('/:taskId/edit', requireRole('employee'), taskValidation, processEditTask);
 
 export default taskRouter;
