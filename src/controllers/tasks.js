@@ -45,8 +45,114 @@ const showTaskDetails = async (req, res) => {
     // retrieve current user data
     const user = req.session.user;
 
-    // retrieve task to show
-    const taskId = parseInt(req.params.task_id)
+    // retrieve task/project data
+    const projectId = parseInt(req.params.id);
+    const taskId = parseInt(req.params.taskId);
+    let task = [];
+
+    try {
+        task = await getTaskById(taskId);
+    }
+    catch (error) {
+        console.error('Error retrieving task:', error);
+        req.flash('error', 'Error retrieving task');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    //render task details page
+    res.render('tasks/details', {
+        title: task.name,
+        user,
+        projectId,
+        task
+    });
+};
+
+/**
+ * Accept task
+ */
+const acceptTask = async (req, res) => {
+    // retrieve current user data
+    const user = req.session.user;
+
+    // retrieve task/project data
+    const projectId = parseInt(req.params.id);
+    const taskId = parseInt(req.params.taskId);
+    let task = [];
+
+    try {
+        task = await getTaskById(taskId);
+    }
+    catch (error) {
+        console.error('Error retrieving task:', error);
+        req.flash('error', 'Error retrieving task');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    // make sure user has permission to accept the task and task is ready to be accepted
+    if (user && (user.roleName === 'employee' || user.roleName === 'admin') && (!task.archived) &&
+       (!task.general) && task.status === 'created') {
+
+        try {
+            await updateTask(taskId, projectId, task.name, task.creator_id, task.description, task.priority, task.general, 'accepted', task.archived, user.id);
+
+            // send success message to user
+            req.flash('success', `${task.name} successfully accepted`);
+            return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
+        }
+        catch (error) {
+            // send error to console and user 
+            console.error('Error updating task:', error);
+            req.flash('error', 'An unexpected error occurred while accepting this task.');
+            return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
+        } 
+    }
+
+    req.flash('error', 'You do not have permission to accept this task or it cannot currently be accepted.');
+    return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
+};
+
+/**
+ * Mark a task complete
+ */
+const completeTask = async (req, res) => {
+    // retrieve current user data
+    const user = req.session.user;
+
+    // retrieve task/project data
+    const projectId = parseInt(req.params.id);
+    const taskId = parseInt(req.params.taskId);
+    let task = [];
+
+    try {
+        task = await getTaskById(taskId);
+    }
+    catch (error) {
+        console.error('Error retrieving task:', error);
+        req.flash('error', 'Error retrieving task');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    // make sure user has permission to complete the task and task is ready to be completed
+    if (user && (user.roleName === 'employee' || user.roleName === 'admin') && (!task.archived) &&
+    ((task.general && task.status === 'created') || ((!task.general) && task.status === 'accepted'))) {
+        try {
+            await updateTask(taskId, projectId, task.name, task.creator_id, task.descriptioin, task.priority, task.general, 'completed', task.archived, null);
+
+            // send success message to user
+            req.flash('success', `${task.name} successfully marked complete`);
+            return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
+        }
+        catch (error) {
+            // send error to console and user 
+            console.error('Error updating task:', error);
+            req.flash('error', 'An unexpected error occurred while marking this task complete.');
+            return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
+        } 
+    }
+
+    req.flash('error', 'You do not have permission to mark this task complete or it cannot currently be completed.');
+    return res.redirect(`/projects/${projectId}/tasks/${taskId}/details`);
 };
 
 /**
@@ -56,7 +162,11 @@ const showAddTask = async (req, res) => {
     //retrieve current user data
     const user = req.session.user;
 
+    let task = { name: '', description: '', archived: false, general: true, priority: null };
+
     // TODO allow restoring task data from a previous attempt
+
+    
 
     const projectId = req.params.id;
     const project = await getProjectById(projectId);
@@ -67,6 +177,8 @@ const showAddTask = async (req, res) => {
         title: `Add new task to ${projectName}`,
         user,
         edit: false,
+        taskId: null,
+        task,
         projectId,
         projectName
     });
@@ -237,6 +349,21 @@ taskRouter.get('/add', requireRole('employee'), showAddTask);
  * POST /projects/:projectId/tasks/add
  */
 taskRouter.post('/add', requireRole('employee'), taskValidation, processAddTask);
+
+/**
+ * GET /projects/:projectId/tasks/:taskId/details
+ */
+taskRouter.get('/:taskId/details', requireRole('employee'), showTaskDetails);
+
+/**
+ * POST /projects/:projectId/tasks/:taskId/accept
+ */
+taskRouter.post('/:taskId/accept', requireRole('employee'), acceptTask);
+
+/**
+ * POST /projects/:projectId/tasks/:taskId/complete
+ */
+taskRouter.post('/:taskId/complete', requireRole('employee'), completeTask);
 
 /**
  * GET /projects/:projectId/tasks/:taskId/edit

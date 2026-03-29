@@ -69,12 +69,11 @@ const showProjectDetails = async (req, res) => {
     catch (error) {
         console.error('Error retrieving project and/or tasks:', error);
         req.flash('error', 'Error retrieving project and/or tasks');
-        //TODO test to make sure this redirects back to /projects
-        return res.redirect('/');
+        return res.redirect('/projects');
     }
 
     //render project details page
-    res.render(`projects/details`, {
+    res.render('projects/details', {
         title: project.name,
         user,
         project,

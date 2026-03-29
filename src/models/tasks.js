@@ -45,8 +45,9 @@ const saveTask = async (project_id, name, creator_id, description = null, priori
  */
 const getTasksByProjectId = async (project_id) => {
     const query = `
-        SELECT tasks.id, tasks.name, tasks.description, tasks.priority, tasks.general, tasks.status, tasks.archived, tasks.creator_id, tasks.acceptor_id, tasks.created_at, tasks.updated_at, tasks.project_id
+        SELECT tasks.id, tasks.name, tasks.description, tasks.priority, tasks.general, tasks.status, tasks.archived, tasks.creator_id, users.username AS "creatorName", tasks.acceptor_id, tasks.created_at, tasks.updated_at, tasks.project_id
         FROM tasks
+        INNER JOIN users ON users.id = tasks.creator_id
         WHERE tasks.project_id = $1
         ORDER BY created_at ASC
     `;
@@ -61,10 +62,10 @@ const getTasksByProjectId = async (project_id) => {
  */
 const getTaskById = async (task_id) => {
     const query = `
-        SELECT tasks.id, tasks.name, tasks.description, tasks.priority, tasks.general, tasks.status, tasks.archived, tasks.creator_id, tasks.acceptor_id, tasks.created_at, tasks.updated_at, tasks.project_id
+        SELECT tasks.id, tasks.name, tasks.description, tasks.priority, tasks.general, tasks.status, tasks.archived, tasks.creator_id, users.username AS "creatorName", tasks.acceptor_id, tasks.created_at, tasks.updated_at, tasks.project_id
         FROM tasks
+        INNER JOIN users ON users.id = tasks.creator_id
         WHERE tasks.id = $1
-        ORDER BY created_at ASC
     `;
     const result = await db.query(query, [task_id]);
     return result.rows[0] || null;
