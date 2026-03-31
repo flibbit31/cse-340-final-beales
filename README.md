@@ -8,12 +8,20 @@ Project Overview:
 
 This website is designed to provide project and other business management tools for the small business I am a part of as well as serving as my final project for CSE 340. 
 
+This website's core functionality is to allow employees to submit tasks they would like completed to the site. Tasks are divided into projects (projects can also be thought of as topics). An employee may then complete the task and submit their completion to the site.
+
+Here is an example for a fictional T-shirt business:
+
+Bob, an adminstrator, creates a project called "Ocean T-Shirt" to represent the business's Ocean T-Shirt product. Carrie, an employee, submits a task for completion called, "Investigate less expensive blank T-Shirt suppliers", and gives more details in the description. Derek, an employee, later sees this task on the site, does some research and finds a supplier that would save them money. He then marks the task complete on the site. (He would still need to report this supplier information to the company through separate means).
+
+
+Additional Details: 
+
 Projects: This site will include projects that may be created, archives, or unarchived by admins. Each project will include a name, description, creation date, updated date, and creator. Archived projects cannot have additional tasks or subtasks added to them unless they are first unarchived.
 
 Tasks: Each project may contain one or more tasks to be completed. Tasks work like a ticket system. An employee may submit a task for completion. Tasks include a name, description, priority, general vs delegated (see section below), status (created, accepted(if it is a delegated task), completed, archived), creator, accepting employee(if it is a delegated task), creation date, and updated date. 
 
 General vs delegated tasks: A task may be either general or delegated. A general task is controlled by the creator (or an admin) only. They determine when the task is complete. Delegated tasks may be accepted by any, but only one, employee. Only the employee who accepted the task may mark it as complete.
-
 
 Ideas for bonus features and project expansion: 
 
