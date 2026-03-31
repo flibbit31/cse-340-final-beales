@@ -47,6 +47,18 @@ const showTaskDetails = async (req, res) => {
 
     // retrieve task/project data
     const projectId = parseInt(req.params.id);
+    let project = [];
+    try {
+        project = await getProjectById(projectId);
+    }
+    catch (error) {
+        console.error('Error retrieving project', error);
+        req.flash('error', 'Error retrieving project');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+
+    const projectName = project.name;
+
     const taskId = parseInt(req.params.taskId);
     let task = [];
 
@@ -64,6 +76,7 @@ const showTaskDetails = async (req, res) => {
         title: task.name,
         user,
         projectId,
+        projectName,
         task
     });
 };
@@ -166,8 +179,6 @@ const showAddTask = async (req, res) => {
 
     // TODO allow restoring task data from a previous attempt
 
-    
-
     const projectId = req.params.id;
     const project = await getProjectById(projectId);
     const projectName = project.name;
@@ -249,6 +260,17 @@ const showEditTask = async (req, res) => {
 
     //retrieve project/task data for prefilling the form
     const projectId = parseInt(req.params.id);
+    let project = [];
+    try {
+        project = await getProjectById(projectId);
+    }
+    catch (error) {
+        console.error('Error retrieving project', error);
+        req.flash('error', 'Error retrieving project');
+        return res.redirect(`/projects/${projectId}/details`);
+    }
+    
+    const projectName = project.name;
     const taskId = parseInt(req.params.taskId);
     let task = [];
 
@@ -273,6 +295,7 @@ const showEditTask = async (req, res) => {
         user,
         edit: true,
         projectId,
+        projectName,
         taskId: task.id,
         task
     });

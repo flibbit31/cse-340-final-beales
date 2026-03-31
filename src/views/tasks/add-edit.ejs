@@ -32,5 +32,7 @@
 
         <button type="submit"><%= edit ? 'Update Task' : 'Add Task' %></button>
     </form>
+
+    <a class="back-link" href="/projects/<%= projectId %>/details">Back to <%= projectName %> details</a>
 </main>
 <%- include('../partials/footer') %>
