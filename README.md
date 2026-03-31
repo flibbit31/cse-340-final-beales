@@ -38,5 +38,7 @@ Pending Employee: Username: pe1
 
 Note: Admin Dashboard cannot be found in the navbar but can be found at /admin-dashboard. 
 
+Database ERD:
+
 ![Entity Relation Diagram](/public/images/ERD.jpg?raw=true "Entity Relation Diagram")
 
