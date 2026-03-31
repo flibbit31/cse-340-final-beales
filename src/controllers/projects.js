@@ -1,10 +1,10 @@
-import { nameExists, saveProject, getAllProjects, getProjectById, updateProject } from '../../models/projects.js';
-import { requireRole } from '../../middleware/auth.js';
+import { nameExists, saveProject, getAllProjects, getProjectById, updateProject } from '../models/projects.js';
+import { requireRole } from '../middleware/auth.js';
 import { validationResult, body } from 'express-validator';
 import { Router } from 'express';
-import { getTasksByProjectId } from '../../models/tasks.js';
+import { getTasksByProjectId } from '../models/tasks.js';
 
-import taskRouter from '../tasks.js';
+import taskRouter from './tasks.js';
 
 const router = Router({ mergeParams: true });
 

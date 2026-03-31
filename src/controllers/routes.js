@@ -6,7 +6,7 @@ import { processLogout } from './forms/login.js';
 
 import adminDashboardRoutes from './admin/dashboard.js';
 
-import projectsRoutes from './projects/projects.js';
+import projectsRoutes from './projects.js';
 
 import { requireRole } from '../middleware/auth.js';
 

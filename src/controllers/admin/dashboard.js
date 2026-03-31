@@ -61,7 +61,7 @@ const showAdminDashboard = async (req, res) => {
     }
 
     // Render admin dashboard
-    res.render('admin-dashboard', {
+    res.render('admin/dashboard', {
         title: 'Admin Dashboard',
         user,
         users
