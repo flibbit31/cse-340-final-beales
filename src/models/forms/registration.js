@@ -51,7 +51,7 @@ const getAllUsers = async () => {
  * Get a single user by their id
  * 
  * @param {} id - User id
- * @returns {Promise<Object>} The user object
+ * @returns {Promise<Object>|null} The user object or null if the user doesn't exist
  */
 const getUserById = async (id) => {
     const query = `

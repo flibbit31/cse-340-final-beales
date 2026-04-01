@@ -4,7 +4,7 @@
     <div class="details">
         <h3>Archival Status: <%= task.archived ? 'archived' : 'active' %></h3>
         <h3>Task Type: <%= task.general ? 'general' : 'delegated' %></h3>
-        <h3>Status: <%= task.status %></h3>
+        <h3>Status: <%= task.status %> <% if (task.status === 'accepted') { %> by <%= acceptorName %> <% } %></h3>
         <h3>Created by: <%= task.creatorName %> on <%= task.created_at %></h3>
         <h3>Last updated on: <%= task.updated_at %></h3>
         <p><%= task.description %></p>
@@ -14,7 +14,7 @@
         const canAccept = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin') && (!task.archived) &&
                           (!task.general) && task.status === 'created';
         const canComplete = currentUser && (currentUser.roleName === 'employee' || currentUser.roleName === 'admin') && (!task.archived) &&
-                            (task.general && task.status === 'created') || ((!task.general) && task.status === 'accepted');
+                            (task.general && task.status === 'created') || ((!task.general) && task.status === 'accepted' && task.acceptor_id === currentUser.id);
      %>
 
     <% if (canAccept) { %> 

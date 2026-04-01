@@ -1,5 +1,6 @@
 import { nameExistsInProject, saveTask, getTasksByProjectId, getTaskById, updateTask, deleteTask } from '../models/tasks.js';
 import { getProjectById } from '../models/projects.js';
+import { getUserById } from '../models/forms/registration.js';
 import { requireRole } from '../middleware/auth.js';
 import { validationResult, body } from 'express-validator';
 import { Router } from 'express';
@@ -71,13 +72,33 @@ const showTaskDetails = async (req, res) => {
         return res.redirect(`/projects/${projectId}/details`);
     }
 
+    let acceptorName = '';
+
+    //if task is an accepted task then retrieve acceptor name for the view
+    if (task.status === 'accepted') {
+        try {
+            const acceptor = await getUserById(task.acceptor_id);
+            if (!acceptor) {
+                throw new Error('Retrieved acceptor is null');
+            }
+
+            acceptorName = acceptor.username;
+        }
+        catch (error) {
+            console.error('Error retrieving acceptor:', error);
+            req.flash('error', 'Error retrieving acceptor');
+            return res.redirect(`/projects/${projectId}/details`);
+        }
+    }
+
     //render task details page
     res.render('tasks/details', {
         title: task.name,
         user,
         projectId,
         projectName,
-        task
+        task,
+        acceptorName
     });
 };
 
@@ -148,7 +169,7 @@ const completeTask = async (req, res) => {
 
     // make sure user has permission to complete the task and task is ready to be completed
     if (user && (user.roleName === 'employee' || user.roleName === 'admin') && (!task.archived) &&
-    ((task.general && task.status === 'created') || ((!task.general) && task.status === 'accepted'))) {
+    ((task.general && task.status === 'created') || ((!task.general) && task.status === 'accepted' && task.acceptor_id === user.id))) {
         try {
             await updateTask(taskId, projectId, task.name, task.creator_id, task.descriptioin, task.priority, task.general, 'completed', task.archived, null);
 
