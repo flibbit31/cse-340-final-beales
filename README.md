@@ -46,6 +46,12 @@ Pending Employee: Username: pe1
 
 Note: Admin Dashboard cannot be found in the navbar but can be found at /admin-dashboard. 
 
+Known Limitations:
+Dynamic CSS loading sometimes breaks randomly, causing site to appear without CSS. May have something to do with too many database connections.
+The user who completed a task is not currently shown. This would be a useful feature.
+Project and Task details all appear in the same color and font. Presentation needs adjusting in this area.
+Flash messages are not as noticable as they could be.
+
 Database ERD:
 
 ![Entity Relation Diagram](/public/images/ERD.jpg?raw=true "Entity Relation Diagram")
